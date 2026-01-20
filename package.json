@@ -1,0 +1,23 @@
+{
+  "name": "pdf-tools",
+  "version": "1.0.0",
+  "description": "免费在线PDF水印移除工具 - 浏览器端运行",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build step required'"
+  },
+  "keywords": [
+    "pdf",
+    "watermark-remover",
+    "pdf-merge",
+    "online-tool",
+    "browser-based"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "homepage": "https://github.com/yourusername/pdf-tools",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

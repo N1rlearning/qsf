@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ t.title }} - {{ t.subtitle }}</title>
+    <meta name="description" content="{{ t.features }}">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 配置 TailwindCSS -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#EEF2FF',
+                            100: '#E0E7FF',
+                            500: '#6366F1',
+                            600: '#4F46E5',
+                            700: '#4338CA',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .drag-over {
+            border-color: #4F46E5 !important;
+            background-color: #EEF2FF !important;
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+    <!-- 头部导航 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50 backdrop-blur-lg bg-white/95">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center text-white text-xl">
+                    📄
+                </div>
+                <span class="text-xl font-bold text-gray-800">{{ t.title }}</span>
+            </a>
+            
+            <nav class="flex items-center gap-4">
+                <a href="/cn" class="text-sm px-3 py-1 rounded transition {% if lang == 'cn' %}bg-primary-100 text-primary-700 font-medium{% else %}text-gray-600 hover:text-primary-600{% endif %}">
+                    中文
+                </a>
+                <a href="/en" class="text-sm px-3 py-1 rounded transition {% if lang == 'en' %}bg-primary-100 text-primary-700 font-medium{% else %}text-gray-600 hover:text-primary-600{% endif %}">
+                    English
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- 主要内容 -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- 英雄区域 -->
+        <section class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+                {{ t.subtitle }}
+            </h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                {{ t.features }}
+            </p>
+        </section>
+        
+        <!-- 功能特性 -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div class="w-14 h-14 bg-gradient-to-br from-primary-100 to-purple-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                    🧹
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ '去除水印' if lang == 'cn' else 'Remove Watermark' }}</h3>
+                <p class="text-gray-600 text-sm">{{ '快速移除PDF中的水印文字' if lang == 'cn' else 'Quickly remove watermark text from PDFs' }}</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div class="w-14 h-14 bg-gradient-to-br from-primary-100 to-purple-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                    📱
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ '移除二维码' if lang == 'cn' else 'Remove QR Code' }}</h3>
+                <p class="text-gray-600 text-sm">{{ '自动清除右下角二维码水印' if lang == 'cn' else 'Automatically clear QR code watermark at bottom right' }}</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div class="w-14 h-14 bg-gradient-to-br from-primary-100 to-purple-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                    📑
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ 'PDF合并' if lang == 'cn' else 'Merge PDF' }}</h3>
+                <p class="text-gray-600 text-sm">{{ '将多个PDF文件合并为一个' if lang == 'cn' else 'Combine multiple PDF files into one' }}</p>
+            </div>
+            
+            <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
+                <div class="w-14 h-14 bg-gradient-to-br from-primary-100 to-purple-100 rounded-xl flex items-center justify-center text-2xl mb-4">
+                    🔒
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ '隐私安全' if lang == 'cn' else 'Privacy' }}</h3>
+                <p class="text-gray-600 text-sm">{{ '所有处理在浏览器本地完成' if lang == 'cn' else 'All processing is done locally' }}</p>
+            </div>
+        </section>
+        
+        <!-- 广告位 -->
+        <div class="bg-white rounded-xl p-4 mb-8 text-center border border-gray-200 min-h-[100px] flex items-center justify-center">
+            <span class="text-gray-400 text-sm">{{ t.ad_placeholder }}</span>
+        </div>
+        
+        <!-- 上传区域 -->
+        <section class="bg-white rounded-2xl shadow-xl p-8 mb-8 border-2 border-dashed border-gray-300 transition-all" id="dropZone">
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4">📁</div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ t.upload_text }}</h2>
+                <p class="text-gray-600">{{ t.upload_subtext }}</p>
+            </div>
+            
+            <div class="text-center mb-6">
+                <input type="file" id="fileInput" accept=".pdf" multiple class="hidden">
+                <button onclick="document.getElementById('fileInput').click()" 
+                        class="bg-gradient-to-r from-primary-600 to-primary-700 text-white px-8 py-3 rounded-xl font-semibold hover:from-primary-700 hover:to-primary-800 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                    📂 {{ '选择PDF文件' if lang == 'cn' else 'Select PDF Files' }}
+                </button>
+            </div>
+            
+            <!-- 文件列表 -->
+            <div class="file-list mt-6 space-y-3"></div>
+        </section>
+        
+        <!-- 处理选项 -->
+        <section class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">{{ '⚙️ 处理选项' if lang == 'cn' else '⚙️ Options' }}</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <label class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+                    <input type="checkbox" id="removeText" checked 
+                           class="w-5 h-5 text-primary-600 rounded focus:ring-primary-500">
+                    <div>
+                        <div class="font-medium text-gray-800">{{ t.option_text }}</div>
+                        <div class="text-sm text-gray-500">{{ t.option_text_desc }}</div>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+                    <input type="checkbox" id="removeQr" checked 
+                           class="w-5 h-5 text-primary-600 rounded focus:ring-primary-500">
+                    <div>
+                        <div class="font-medium text-gray-800">{{ t.option_qr }}</div>
+                        <div class="text-sm text-gray-500">{{ t.option_qr_desc }}</div>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+                    <input type="checkbox" id="mergePdf" checked 
+                           class="w-5 h-5 text-primary-600 rounded focus:ring-primary-500">
+                    <div>
+                        <div class="font-medium text-gray-800">{{ t.option_merge }}</div>
+                        <div class="text-sm text-gray-500">{{ t.option_merge_desc }}</div>
+                    </div>
+                </label>
+                
+                <label class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl cursor-pointer hover:bg-gray-100 transition">
+                    <input type="checkbox" id="compress" checked 
+                           class="w-5 h-5 text-primary-600 rounded focus:ring-primary-500">
+                    <div>
+                        <div class="font-medium text-gray-800">{{ t.option_compress }}</div>
+                        <div class="text-sm text-gray-500">{{ t.option_compress_desc }}</div>
+                    </div>
+                </label>
+            </div>
+        </section>
+        
+        <!-- 处理按钮 -->
+        <div class="text-center mb-8">
+            <button id="processBtn" onclick="processFiles()" disabled
+                    class="bg-gradient-to-r from-primary-600 to-purple-600 text-white px-12 py-4 rounded-xl font-bold text-lg hover:from-primary-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                🚀 {{ t.btn_process }}
+            </button>
+        </div>
+        
+        <!-- 进度条 -->
+        <div id="progressSection" class="hidden bg-white rounded-2xl shadow-xl p-8 mb-8 fade-in">
+            <div class="text-center mb-4">
+                <span id="progressText" class="text-gray-600">{{ t.btn_processing }}</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-primary-600 to-purple-600 h-4 rounded-full transition-all duration-300" 
+                     style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <!-- 结果区域 -->
+        <div id="resultSection" class="hidden bg-white rounded-2xl shadow-xl p-8 fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-green-600 flex items-center gap-3">
+                    {{ t.result_title }}
+                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">{{ t.result_success }}</span>
+                </h2>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-primary-50 to-purple-50 rounded-xl p-4 text-center">
+                    <div id="pageCount" class="text-3xl font-bold text-primary-600">0</div>
+                    <div class="text-gray-600 text-sm mt-1">{{ t.pages }}</div>
+                </div>
+                <div class="bg-gradient-to-br from-primary-50 to-purple-50 rounded-xl p-4 text-center">
+                    <div id="fileCount" class="text-3xl font-bold text-primary-600">0</div>
+                    <div class="text-gray-600 text-sm mt-1">{{ t.files }}</div>
+                </div>
+                <div class="bg-gradient-to-br from-primary-50 to-purple-50 rounded-xl p-4 text-center">
+                    <div id="watermarkCount" class="text-3xl font-bold text-primary-600">0</div>
+                    <div class="text-gray-600 text-sm mt-1">{{ t.watermarks }}</div>
+                </div>
+                <div class="bg-gradient-to-br from-primary-50 to-purple-50 rounded-xl p-4 text-center">
+                    <div id="outputSize" class="text-3xl font-bold text-primary-600">0 MB</div>
+                    <div class="text-gray-600 text-sm mt-1">{{ t.size }}</div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a id="downloadLink" href="#" 
+                   class="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-center py-4 rounded-xl font-semibold hover:from-green-600 hover:to-emerald-700 transition-all shadow-lg">
+                    ⬇️ {{ t.btn_download }}
+                </a>
+                <button onclick="resetAll()"
+                        class="flex-1 bg-gray-100 text-gray-700 py-4 rounded-xl font-semibold hover:bg-gray-200 transition-all">
+                    🔄 {{ t.btn_reset }}
+                </button>
+            </div>
+        </div>
+        
+        <!-- 广告位 -->
+        <div class="bg-white rounded-xl p-4 mt-8 text-center border border-gray-200 min-h-[100px] flex items-center justify-center">
+            <span class="text-gray-400 text-sm">{{ t.ad_placeholder }}</span>
+        </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-6xl mx-auto px-4 py-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="text-gray-600">
+                    <strong class="text-gray-800">{{ t.title }}</strong> - {{ t.subtitle }}
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="#" class="text-gray-600 hover:text-primary-600 transition">{{ '使用条款' if lang == 'cn' else 'Terms' }}</a>
+                    <a href="#" class="text-gray-600 hover:text-primary-600 transition">{{ '隐私政策' if lang == 'cn' else 'Privacy' }}</a>
+                    <a href="https://github.com/yourusername/pdf-tools" target="_blank" class="text-gray-600 hover:text-primary-600 transition">
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        // 全局变量
+        let uploadedFiles = [];
+        let processedPdfBytes = null;
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const dropZone = document.getElementById('dropZone');
+            
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // 拖拽上传
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('drag-over');
+            });
+            
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+            });
+            
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                handleFiles(e.dataTransfer.files);
+            });
+        });
+        
+        // 处理文件选择
+        function handleFileSelect(e) {
+            handleFiles(e.target.files);
+        }
+        
+        // 处理文件
+        async function handleFiles(files) {
+            for (let file of files) {
+                if (file.type !== 'application/pdf') {
+                    alert(`⚠️ ${file.name} 不是PDF文件`);
+                    continue;
+                }
+                
+                if (file.size > 100 * 1024 * 1024) {
+                    alert(`⚠️ ${file.name} 超过100MB限制`);
+                    continue;
+                }
+                
+                uploadedFiles.push({
+                    name: file.name,
+                    size: file.size,
+                    file: file
+                });
+            }
+            
+            updateFileList();
+            updateProcessButton();
+        }
+        
+        // 更新文件列表
+        function updateFileList() {
+            const container = document.querySelector('.file-list');
+            
+            if (uploadedFiles.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            container.innerHTML = uploadedFiles.map((file, index) => `
+                <div class="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">📄</span>
+                        <div>
+                            <div class="font-medium text-gray-800">${file.name}</div>
+                            <div class="text-sm text-gray-500">${formatFileSize(file.size)}</div>
+                        </div>
+                    </div>
+                    <button onclick="removeFile(${index})" 
+                            class="text-gray-400 hover:text-red-500 p-2 hover:bg-red-50 rounded-lg transition">
+                        ✕
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        // 移除文件
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateFileList();
+            updateProcessButton();
+        }
+        
+        // 更新处理按钮
+        function updateProcessButton() {
+            const btn = document.getElementById('processBtn');
+            btn.disabled = uploadedFiles.length === 0;
+            
+            const lang = '{{ lang }}';
+            const btnText = lang === 'cn' ? '请先上传文件' : 'Please upload files first';
+            
+            if (uploadedFiles.length === 0) {
+                btn.innerHTML = '🚀 ' + btnText;
+            } else {
+                const filesText = lang === 'cn' ? '个文件' : 'files';
+                btn.innerHTML = `🚀 {{ t.btn_process }} (${uploadedFiles.length} ${filesText})`;
+            }
+        }
+        
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+        
+        // 更新进度
+        function updateProgress(percent, text) {
+            document.getElementById('progressBar').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+        
+        // 处理文件
+        async function processFiles() {
+            if (uploadedFiles.length === 0) return;
+            
+            const removeText = document.getElementById('removeText').checked;
+            const removeQr = document.getElementById('removeQr').checked;
+            const mergePdf = document.getElementById('mergePdf').checked;
+            const compress = document.getElementById('compress').checked;
+            
+            // 显示进度条
+            document.getElementById('progressSection').classList.remove('hidden');
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('processBtn').disabled = true;
+            
+            try {
+                const formData = new FormData();
+                for (let file of uploadedFiles) {
+                    formData.append('files', file.file);
+                }
+                formData.append('remove_text', removeText);
+                formData.append('remove_qr', removeQr);
+                formData.append('merge', mergePdf);
+                formData.append('compress', compress);
+                formData.append('lang', '{{ lang }}');
+                
+                updateProgress(20, '{{ t.btn_processing }}');
+                
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                updateProgress(80, '{{ t.btn_processing }}');
+                
+                if (result.success) {
+                    document.getElementById('pageCount').textContent = result.stats.pages;
+                    document.getElementById('fileCount').textContent = result.stats.files;
+                    document.getElementById('watermarkCount').textContent = result.stats.watermarks;
+                    document.getElementById('outputSize').textContent = result.stats.size_mb + ' MB';
+                    
+                    document.getElementById('downloadLink').href = '/download/' + result.task_id;
+                    document.getElementById('resultSection').classList.remove('hidden');
+                    
+                    updateProgress(100, '{{ t.btn_processing }}');
+                    
+                    document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert('处理失败: ' + result.error);
+                }
+                
+            } catch (error) {
+                alert('处理失败: ' + error.message);
+            }
+            
+            document.getElementById('processBtn').disabled = false;
+        }
+        
+        // 重置
+        function resetAll() {
+            uploadedFiles = [];
+            processedPdfBytes = null;
+            
+            updateFileList();
+            updateProcessButton();
+            
+            document.getElementById('resultSection').classList.add('hidden');
+            document.getElementById('fileInput').value = '';
+            document.getElementById('progressSection').classList.add('hidden');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
